@@ -73,5 +73,6 @@ export const PROJECTS: Project[] = [
       "作業と休憩など複数ステップを順番に進める時間管理を、音声通知で支援するデスクトップ向けインターバルタイマー。終了予定時刻を基準に残り時間を計算し直すことでズレを抑え、ステップ構成を「ルーティン」として保存・書き出しできる。",
     stack: ["React", "TypeScript", "Vite"],
     category: "業務効率化・制作支援",
+    demoUrl: "https://claude.ai/code/artifact/77e19ea7-d74b-4412-8f84-b2029d980274",
   },
 ];
