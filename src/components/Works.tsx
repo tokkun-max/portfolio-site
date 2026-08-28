@@ -40,7 +40,7 @@ function ProjectCTAs({ project }: { project: Project }) {
             href={project.demoUrl}
             className="rounded-full bg-accent px-4 py-1.5 text-xs font-semibold text-white transition-transform hover:scale-105"
           >
-            デモサイトを開く
+            {project.demoLabel ?? "デモサイトを開く"}
           </a>
         ) : project.videoUrl ? (
           <a

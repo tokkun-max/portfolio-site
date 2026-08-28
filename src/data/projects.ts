@@ -7,6 +7,8 @@ export type Project = {
   repoUrl?: string;
   // 公開URLがあるWebアプリの場合に設定（おもてなし導線：デモサイトを開く）
   demoUrl?: string;
+  // デモボタンの表示文言を上書きしたい場合に設定（例：Android版が本体のアプリのWeb版デモ）
+  demoLabel?: string;
   guestAccount?: { email: string; password: string };
   // 公開URLがないAndroid/GASツールの場合に設定（おもてなし導線：デモ動画/GIFを見る）
   videoUrl?: string;
@@ -57,6 +59,8 @@ export const PROJECTS: Project[] = [
       "「重要度」と「緊急度」の2軸でタスクを4象限に整理するアイゼンハワーマトリクス型アプリ（Capacitorでモバイル対応）。立体的な3Dデザインとリスト名⇔締切日のフリップアニメーションで、印象に残りやすいタスク管理を目指した。",
     stack: ["JavaScript", "Capacitor"],
     category: "業務効率化・制作支援",
+    demoUrl: "https://claude.ai/code/artifact/daf5dff4-636e-4409-88fb-9f79d6bad771",
+    demoLabel: "デモサイトを開く（ウェブ版）",
   },
   {
     slug: "multi-counter-app",
@@ -65,6 +69,8 @@ export const PROJECTS: Project[] = [
       "グループ(ボード)ごとにカウンターをまとめて管理できるタスク管理アプリ（Capacitorでモバイル対応）。立体的な3Dデザイン、背景画像設定、ロック時のポップアニメーションで、使うたびに気持ちが前向きになる工夫を凝らした。",
     stack: ["JavaScript", "Capacitor"],
     category: "業務効率化・制作支援",
+    demoUrl: "https://claude.ai/code/artifact/98314473-35a7-4109-9073-435353186c32",
+    demoLabel: "デモサイトを開く（ウェブ版）",
   },
   {
     slug: "interval-timer",
