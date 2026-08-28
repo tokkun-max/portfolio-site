@@ -33,6 +33,8 @@ export const PROJECTS: Project[] = [
       "コード進行・ドラムパターン・メロディー・対旋律を音楽理論に基づいて自動生成するGoogle Apps Script。対旋律の不協和音回避やパターンの単調さ回避にこだわり、生成したCSVは対旋律MIDI生成編集ツールへそのまま引き渡せる、作曲パイプラインの起点。",
     stack: ["Google Apps Script"],
     category: "音楽・音声制作",
+    demoUrl:
+      "https://docs.google.com/spreadsheets/d/1sNymBvNj8PIod8SJibq6b9u4dAIjutTJN9DC-SvGAdM/edit?gid=2087413854#gid=2087413854",
   },
   {
     slug: "senritsu-preview-player",
