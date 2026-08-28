@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio Site
 
-## Getting Started
+未経験からWebエンジニアへの転職を目指して制作したポートフォリオサイトです。
 
-First, run the development server:
+## サービス概要
+
+TODO: このサイト（または掲載しているプロジェクト）が何をするものか、誰の・どんな課題を解決するのかを1〜3文で記載してください。
+
+## 開発のきっかけ（抱えていた課題・お悩み）
+
+TODO: 開発に至った背景、当時抱えていた課題やお悩みを記載してください。
+- 例）どんな課題があったか
+- 例）なぜ自作しようと思ったか
+
+## 使い方
+
+TODO: セットアップ手順・利用方法を記載してください。
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[http://localhost:3000](http://localhost:3000) を開くと確認できます。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+本番向けの静的ファイルを出力する場合:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+`out/` ディレクトリに静的サイトが生成されます（`next.config.ts` で `output: "export"` を指定）。
 
-To learn more about Next.js, take a look at the following resources:
+## 使用技術スタック
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| 分類 | 技術 |
+| --- | --- |
+| フレームワーク | Next.js (App Router, SSG) |
+| 言語 | TypeScript |
+| スタイリング | Tailwind CSS |
+| アニメーション | Framer Motion |
+| シンタックスハイライト | react-syntax-highlighter |
+| CI/CD | GitHub Actions |
+| Lint | ESLint |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+TODO: バックエンド・データベース・インフラ等を追加で使用した場合はここに追記してください。
 
-## Deploy on Vercel
+## 工夫・苦労したポイント
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+TODO: 技術的な工夫や苦労した点、それをどう乗り越えたかを記載してください。面接で語れる具体的なエピソードにすると効果的です。
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- 例）トップページのインタラクティブな演出（マウス追従グロー・スクロール連動フェードイン）の実装
+- 例）レスポンシブ対応・可読性を意識したレイアウト設計
+- 例）ER図・画面遷移図による設計の可視化
+
+## 設計ドキュメント
+
+- ER図（データベース構造図）: サイト内「Structure」セクション参照（TODO: 画像を差し替え）
+- 画面遷移図: サイト内「Structure」セクション参照（TODO: 画像を差し替え）
+
+## ディレクトリ構成
+
+```
+src/
+  app/            # ルーティング・レイアウト・グローバルCSS
+  components/      # セクションごとのコンポーネント
+    Header.tsx
+    Hero.tsx           # トップページ（アニメーション・マウス追従演出）
+    About.tsx          # 自己紹介・スキルスタック
+    Works.tsx          # 制作実績・コード掲載（シンタックスハイライト）
+    StructureSection.tsx # ER図・画面遷移図
+    Footer.tsx
+    FadeIn.tsx         # スクロール連動フェードインの共通ラッパー
+    CursorGlow.tsx      # マウス追従インタラクション
+    CodeBlock.tsx       # シンタックスハイライト付きコード表示
+```
+
+## デプロイ / インフラ
+
+TODO: Vercel / GitHub Pages / VPS など、実際のデプロイ先を記載してください。GitHub Actions のワークフローは `.github/workflows/ci.yml` を参照してください。
+
+## 自己紹介（About）を書くときのメモ
+
+`src/components/About.tsx` の各カードを埋める際の参考メモです。
+
+- 必須5要素: クリエイターとしての経歴 / 具体的な保有スキル（何ができるか） / 受賞歴・実績 / 仕事に活きる趣味・特技 / 強みを発揮したエピソード（自己PR）
+- +αの要素: 学習・努力の姿勢（情報収集元） / 目指すエンジニア像 / 開発のきっかけ（原体験）
+- 文章は1文25〜40文字程度を目安に簡潔にまとめ、見出しは短いキーフレーズにする
+- 履歴書・ESと内容を重複させず、「作品制作で大切にしている世界観や強み」など、ここでしか伝えられないことを書く
+- 誤字脱字は信用に直結するため、公開前に必ず校閲する
