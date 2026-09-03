@@ -1,6 +1,6 @@
 import FadeIn from "./FadeIn";
 
-const LINKS = [{ label: "Email", href: "mailto:tokuato2@gmail.com" }];
+const LINKS = [{ label: "Gmail", href: "mailto:tokuato2@gmail.com" }];
 
 export default function Footer() {
   return (
