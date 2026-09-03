@@ -10,7 +10,7 @@ export default function Footer() {
           <p className="font-mono text-sm text-accent-2">Contact</p>
           <h2 className="section-heading mt-3">お問い合わせ</h2>
           <p className="mt-4 max-w-xl text-muted leading-relaxed">
-            TODO: 一言メッセージ（面談のご連絡お待ちしています、等）をここに記載してください。
+            制作実績へのご感想や面談のご連絡など、お気軽にご連絡ください。
           </p>
         </FadeIn>
 
