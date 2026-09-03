@@ -7,6 +7,8 @@ export type ProjectDetail = {
   slug: string;
   title: string;
   subtitle: string;
+  // 紹介の直後に埋め込むデモ動画（YouTube動画ID。埋め込み再生のみでYouTubeへはリダイレクトしない）
+  demoVideo?: { youtubeId: string; caption: string; vertical?: boolean };
   sections: DetailSection[];
 };
 
@@ -16,6 +18,7 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
     slug: "music-info-gas",
     title: "音楽情報更新GAS",
     subtitle: "Google Apps Script",
+    demoVideo: { youtubeId: "ZDA3jdDAH2U", caption: "実行手順デモ", vertical: true },
     sections: [
       {
         heading: "はじめに",
@@ -87,6 +90,10 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
     slug: "senritsu-preview-player",
     title: "旋律プレビュープレーヤー",
     subtitle: "JavaScript / Tone.js",
+    demoVideo: {
+      youtubeId: "w4eRXqXlXhM",
+      caption: "音楽情報シートを反映・編集するデモ",
+    },
     sections: [
       {
         heading: "はじめに",
@@ -393,6 +400,63 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
         heading: "おわりに",
         paragraphs: [
           "本アプリは、日々の学習や作業をスムーズに進めたいという、自分自身の実体験から生まれたツールです。今後もユーザー目線での改善を重ねていきたいと考えています。",
+        ],
+      },
+    ],
+  },
+
+  "mylist-player": {
+    slug: "mylist-player",
+    title: "MyList Player",
+    subtitle: "JavaScript / Capacitor",
+    sections: [
+      {
+        heading: "はじめに",
+        paragraphs: [
+          "YouTubeを開くと、目的の動画を見終わった後も検索結果や関連動画、おすすめに次々と目移りしてしまい、気づけば予定外の時間を使ってしまう、という経験がありました。この「見るつもりのなかった動画についダラダラと時間を使ってしまう」離脱を防ぎたいという思いから、本アプリの開発を始めました。",
+        ],
+      },
+      {
+        heading: "コンセプト",
+        paragraphs: [
+          "本アプリのコンセプトは、YouTubeの検索・関連動画・おすすめといった、視聴者の興味を引いて回遊させるための導線を徹底的に排除し、自分があらかじめ登録した再生リストだけを視聴できる状態に限定することです。",
+          "便利さや多機能さよりも、「意思の力に頼らずに、見たいものだけを見て終われる」というシンプルな制約を優先して設計しています。",
+        ],
+      },
+      {
+        heading: "サービス概要／プロダクト概要",
+        paragraphs: [
+          "本アプリは、登録済みのYouTube再生リストのみを視聴できる、個人用の離脱防止PWA（Progressive Web App）です。",
+          "ホーム画面には登録済みの再生リストのみが並び、追加登録はYouTubeの再生リストURLを貼り付けるだけで、oEmbed APIを使ってタイトルとサムネイルを自動取得します。再生画面はIFrame Player APIを使い、関連動画や次のおすすめを表示させない設定で埋め込んでいるため、検索や関連動画をたどって別の動画に流れてしまうことがありません。",
+        ],
+      },
+      {
+        heading: "動作要件・環境",
+        paragraphs: [
+          "本アプリはHTML・CSS・JavaScriptで作られたPWAで、データはブラウザのlocalStorageにのみ保存され、専用サーバーは不要です。ブラウザで動作確認する場合はPythonのローカルサーバー（`python -m http.server`）を使用します。",
+          "Capacitorを使ってAndroidアプリ化もしており、APKビルドにはNode.js/npm・Android SDK・Gradleのセットアップが必要です。",
+        ],
+      },
+      {
+        heading: "利用方法・設定手順",
+        paragraphs: [
+          "【ブラウザで確認する場合】`start.bat` をダブルクリックすると、`www` フォルダで `python -m http.server 8000` が起動し、ブラウザで自動的に `http://localhost:8000/index.html` が開きます。",
+          "【Androidアプリとして使う場合】`build-and-deploy.bat` をダブルクリックすると、`npx cap sync android` でCapacitorの同期を行った上でGradleによりdebug APKをビルドし、指定フォルダにAPKファイルをコピーします。",
+          "ホーム画面の追加ボタンから、視聴したいYouTube再生リストのURLを貼り付けると、タイトルとサムネイルが自動取得されて一覧に追加されます。あとは見たい再生リストをタップして再生するだけです。",
+        ],
+      },
+      {
+        heading: "実装におけるこだわりとセキュリティ",
+        paragraphs: [
+          "最もこだわったのは、YouTube視聴時の「離脱経路」を徹底的に断つことです。IFrame Player APIに `rel=0` や `listType: playlist` を指定して関連動画の表示を抑制し、検索窓やおすすめ欄そのものを画面に置かない設計にすることで、登録した再生リスト以外へ動線が伸びないようにしています。",
+          "再生リストが終端に達した際は、ENDEDイベントを検知して自動的に次の動画へ進む作りにしており、操作の手間を減らしながらも視聴範囲は登録済みの再生リスト内に収まるようにしています。",
+          "データ保存はブラウザのlocalStorageのみで、外部サーバーへの送信は行っていません。個人利用を前提に、シンプルな構成を保っています。",
+        ],
+      },
+      {
+        heading: "おわりに",
+        paragraphs: [
+          "本アプリは、「YouTubeを開いてダラダラ見てしまう」という自分自身の課題を解決するために作った、離脱防止に特化したツールです。多機能さよりも、見たいものだけを見て終われるという制約そのものに価値を置いて開発しました。",
         ],
       },
     ],

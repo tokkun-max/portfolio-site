@@ -39,7 +39,6 @@ npm run build
 | 言語 | TypeScript |
 | スタイリング | Tailwind CSS |
 | アニメーション | Framer Motion |
-| シンタックスハイライト | react-syntax-highlighter |
 | CI/CD | GitHub Actions |
 | Lint | ESLint |
 
@@ -63,16 +62,19 @@ TODO: 技術的な工夫や苦労した点、それをどう乗り越えたか�
 ```
 src/
   app/            # ルーティング・レイアウト・グローバルCSS
+    works/[slug]/     # 制作実績の詳細ページ（プロジェクトごとに静的生成）
   components/      # セクションごとのコンポーネント
     Header.tsx
     Hero.tsx           # トップページ（アニメーション・マウス追従演出）
     About.tsx          # 自己紹介・スキルスタック
-    Works.tsx          # 制作実績・コード掲載（シンタックスハイライト）
+    Works.tsx          # 制作実績
     StructureSection.tsx # ER図・画面遷移図
     Footer.tsx
     FadeIn.tsx         # スクロール連動フェードインの共通ラッパー
     CursorGlow.tsx      # マウス追従インタラクション
-    CodeBlock.tsx       # シンタックスハイライト付きコード表示
+  data/
+    projects.ts         # 制作実績一覧（カード表示用。demoUrl/videoUrl等もここ）
+    projectDetails.ts   # 各プロジェクトの詳細ページ本文・デモ動画（demoVideo、YouTube埋め込み）
 ```
 
 ## デプロイ / インフラ

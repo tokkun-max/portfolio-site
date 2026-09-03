@@ -1,20 +1,6 @@
 import Link from "next/link";
 import FadeIn from "./FadeIn";
-import CodeBlock from "./CodeBlock";
 import { CATEGORIES, PROJECTS, type Project } from "@/data/projects";
-
-const SAMPLE_CODE = `type Props = {
-  title: string;
-  onSelect: (id: string) => void;
-};
-
-export function ProjectCard({ title, onSelect }: Props) {
-  return (
-    <button onClick={() => onSelect(title)}>
-      {title}
-    </button>
-  );
-}`;
 
 // 「おもてなし導線」ボタン群。公開URL・デモ動画・ココナラ実績の有無に応じて出し分ける。
 function ProjectCTAs({ project }: { project: Project }) {
@@ -152,11 +138,6 @@ export default function Works() {
           </div>
         );
       })}
-
-      <FadeIn delay={0.2} className="mt-16">
-        <p className="mb-3 text-sm text-muted">コード掲載例（シンタックスハイライト対応）</p>
-        <CodeBlock code={SAMPLE_CODE} language="tsx" filename="ProjectCard.tsx" />
-      </FadeIn>
     </section>
   );
 }

@@ -4,7 +4,7 @@ import FadeIn from "./FadeIn";
 const LINKS = [
   { label: "GitHub", href: "https://github.com/your-account" },
   { label: "X (Twitter)", href: "https://x.com/your-account" },
-  { label: "Email", href: "mailto:superyesman24@gmail.com" },
+  { label: "Email", href: "mailto:tokuato2@gmail.com" },
 ];
 
 export default function Footer() {
@@ -32,7 +32,7 @@ export default function Footer() {
         </FadeIn>
 
         <p className="mt-16 text-xs text-muted">
-          © {new Date().getFullYear()} Your Name. Built with Next.js & Tailwind CSS.
+          © {new Date().getFullYear()} 徳里貴之. Built with Next.js & Tailwind CSS.
         </p>
       </div>
     </footer>

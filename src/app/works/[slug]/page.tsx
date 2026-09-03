@@ -60,6 +60,27 @@ export default async function ProjectDetailPage({
         </div>
       </FadeIn>
 
+      {detail.demoVideo ? (
+        <FadeIn delay={0.05} className="mt-8">
+          <div
+            className={
+              detail.demoVideo.vertical
+                ? "mx-auto aspect-[9/16] max-w-[360px] overflow-hidden rounded-xl border border-border"
+                : "aspect-video w-full overflow-hidden rounded-xl border border-border"
+            }
+          >
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${detail.demoVideo.youtubeId}`}
+              title={detail.demoVideo.caption}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
+              className="h-full w-full"
+            />
+          </div>
+          <p className="mt-2 text-xs text-muted">{detail.demoVideo.caption}</p>
+        </FadeIn>
+      ) : null}
+
       <div className="mt-14 flex flex-col gap-12">
         {detail.sections.map((section, i) => (
           <FadeIn key={section.heading} delay={0.03 * i}>

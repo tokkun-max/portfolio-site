@@ -4,7 +4,6 @@ import QuickIndex from "@/components/QuickIndex";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
 import Works from "@/components/Works";
-import Activities from "@/components/Activities";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -17,7 +16,6 @@ export default function Home() {
         <About />
         <Skills />
         <Works />
-        <Activities />
       </main>
       <Footer />
     </>

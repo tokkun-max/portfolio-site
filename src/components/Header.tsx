@@ -7,7 +7,6 @@ const NAV_ITEMS = [
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
   { href: "#works", label: "Works" },
-  { href: "#activities", label: "Activities" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -31,7 +30,7 @@ export default function Header() {
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#top" className="text-lg font-bold tracking-tight">
-          <span className="gradient-text">Your Name</span>
+          <span className="gradient-text">徳里貴之</span>
         </a>
 
         <ul className="hidden gap-8 text-sm text-muted md:flex">

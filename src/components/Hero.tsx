@@ -48,14 +48,13 @@ export default function Hero() {
           variants={item}
           className="text-5xl font-black leading-tight tracking-tight sm:text-6xl md:text-7xl"
         >
-          未経験から、
+          図面と向き合った2年間から、
           <br />
-          <span className="gradient-text">動くものを作る</span>力へ。
+          <span className="gradient-text">コードと向き合う</span>毎日へ。
         </motion.h1>
 
         <motion.p variants={item} className="max-w-xl text-base text-muted sm:text-lg">
-          設計からコーディング、CI/CDまで一貫して作り込んだポートフォリオです。
-          TODO: 自己紹介・目指すエンジニア像をここに記載してください。
+          設計からコーディング、CI/CDまで一貫して作り込んだポートフォリオです。半導体製造で培った品質意識と、独学で磨いたAI活用力を武器に、仕様の先にある価値を提案できるエンジニアを目指しています。
         </motion.p>
 
         <motion.div variants={item} className="flex flex-wrap gap-4 pt-2">

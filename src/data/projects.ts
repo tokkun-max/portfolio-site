@@ -75,6 +75,16 @@ export const PROJECTS: Project[] = [
     demoLabel: "デモサイトを開く（ウェブ版）",
   },
   {
+    slug: "mylist-player",
+    title: "MyList Player",
+    description:
+      "YouTubeの検索・関連動画・おすすめを排除し、登録済み再生リストのみ視聴できる離脱防止用の個人PWA。追加登録はプレイリストURLを貼り付けるだけでoEmbed APIがタイトル/サムネイルを自動取得し、IFrame Player APIで関連動画表示を抑制。Capacitorでモバイルアプリ化。",
+    stack: ["JavaScript", "Capacitor"],
+    category: "業務効率化・制作支援",
+    demoUrl: "https://claude.ai/code/artifact/1c19f87b-c566-43f4-bffd-49462e3f4593",
+    demoLabel: "デモサイトを開く（Web版）",
+  },
+  {
     slug: "interval-timer",
     title: "インターバルタイマー",
     description:
