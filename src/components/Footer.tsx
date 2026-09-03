@@ -1,11 +1,6 @@
 import FadeIn from "./FadeIn";
 
-// TODO: GitHub / X のアカウントURLを、履歴書に記載するものと一致させてご自身のものに差し替えてください。
-const LINKS = [
-  { label: "GitHub", href: "https://github.com/your-account" },
-  { label: "X (Twitter)", href: "https://x.com/your-account" },
-  { label: "Email", href: "mailto:tokuato2@gmail.com" },
-];
+const LINKS = [{ label: "Email", href: "mailto:tokuato2@gmail.com" }];
 
 export default function Footer() {
   return (
