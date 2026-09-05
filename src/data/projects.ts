@@ -21,7 +21,7 @@ export type Project = {
   };
 };
 
-export const CATEGORIES = ["音楽・音声制作", "業務効率化・制作支援"] as const;
+export const CATEGORIES = ["音楽・音声制作", "業務効率化・制作支援", "学習支援"] as const;
 
 // ポートフォリオ資料（docx）が用意されている制作物のみを掲載
 export const PROJECTS: Project[] = [
@@ -92,5 +92,16 @@ export const PROJECTS: Project[] = [
     stack: ["React", "TypeScript", "Vite"],
     category: "業務効率化・制作支援",
     demoUrl: "https://claude.ai/code/artifact/77e19ea7-d74b-4412-8f84-b2029d980274",
+  },
+
+  // 学習支援
+  {
+    slug: "indo-anzan-app",
+    title: "インド式あんざんアプリ",
+    description:
+      "インド式計算法をベースにした暗算トレーニングWebアプリ。2桁×2桁・3桁×3桁のかけ算や立方数の問題をランダム出題し、その場で採点・解説まで行える。DAOパターンによるDB操作の一元化や入力値検証・セッション管理など、セキュリティと保守性を意識したServlet/JSP実装。",
+    stack: ["Java", "Servlet/JSP", "H2 Database"],
+    category: "学習支援",
+    demoUrl: "https://anzan-app.onrender.com",
   },
 ];

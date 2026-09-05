@@ -1,6 +1,7 @@
 import Link from "next/link";
 import FadeIn from "./FadeIn";
 import { CATEGORIES, PROJECTS, type Project } from "@/data/projects";
+import { PROJECT_DETAILS } from "@/data/projectDetails";
 
 // 「おもてなし導線」ボタン群。公開URL・デモ動画・ココナラ実績の有無に応じて出し分ける。
 function ProjectCTAs({ project }: { project: Project }) {
@@ -67,10 +68,18 @@ function ProjectCTAs({ project }: { project: Project }) {
 }
 
 function ProjectCard({ project, delay }: { project: Project; delay: number }) {
+  const hasVideo = Boolean(PROJECT_DETAILS[project.slug]?.demoVideo);
   return (
     <FadeIn delay={delay}>
       <article className="flex h-full flex-col gap-3 rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-accent">
-        <h4 className="text-base font-bold leading-snug">{project.title}</h4>
+        <div className="flex items-start justify-between gap-2">
+          <h4 className="text-base font-bold leading-snug">{project.title}</h4>
+          {hasVideo ? (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent/15 px-2.5 py-1 text-[11px] font-bold text-accent-2">
+              🎬 動画あり
+            </span>
+          ) : null}
+        </div>
         <p className="text-sm leading-relaxed text-muted">{project.description}</p>
         <div className="flex flex-wrap gap-2">
           {project.stack.map((tech) => (
