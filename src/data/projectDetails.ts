@@ -152,7 +152,7 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
     slug: "midi-gas-web",
     title: "midi-gas-web（CSV→MIDI変換ツール）",
     subtitle: "Python / Flask / mido",
-    demoVideo: { youtubeId: "Y_949APqejY", caption: "CSVからMIDIファイルを生成する手順デモ" },
+    demoVideo: { youtubeId: "YEBJtZ0KCNw", caption: "CSVからMIDIファイルを生成する手順デモ" },
     sections: [
       {
         heading: "はじめに",
