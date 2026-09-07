@@ -114,10 +114,6 @@ export default function Works() {
         <p className="mt-4 max-w-2xl text-muted leading-relaxed">
           これまでに個人開発したツール・アプリの一覧です。音楽/音声制作の自動化から、日々の作業を効率化する業務ツールまで、幅広く手を動かしてきました。
         </p>
-        <p className="mt-2 max-w-2xl text-xs text-muted">
-          TODO: 各アプリを公開したら src/data/projects.ts に demoUrl（公開URL）/ guestAccount（ゲストログイン）/
-          videoUrl（デモ動画・GIFのURL）/ coconala（出品リンクと実績）を追記してください。設定すると自動でカードに「デモサイトを開く」「1分デモ動画を見る」「ココナラ出品ページを見る」ボタンが表示されます。
-        </p>
       </FadeIn>
 
       {CATEGORIES.map((category, categoryIndex) => {
