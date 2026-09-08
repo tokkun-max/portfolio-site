@@ -274,7 +274,9 @@
     border-bottom:1px solid var(--paper-line);
     margin-bottom:4px;
   }
+  .list-title-wrap{ min-width:0; overflow:hidden; }
   .list-header #listFolderName{
+    display:block;
     font-weight:700; font-size:14px;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   }
@@ -283,9 +285,10 @@
     font-size:12px; color:var(--ink-soft); flex:none; margin-left:8px;
   }
   .sample-badge{
+    display:block;
     font-size:11px;
     color:var(--accent);
-    display:block;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
     margin-top:2px;
   }
   .video-list{
@@ -375,7 +378,7 @@
 
     <aside class="list-col">
       <div class="list-header">
-        <div>
+        <div class="list-title-wrap">
           <span id="listFolderName">読み込み中…</span>
           <span class="sample-badge" id="sampleBadge" hidden>作者の学習動画（公開サンプル）</span>
         </div>
@@ -400,6 +403,7 @@
 
   var PUBLIC_LIBRARY_ID = 'public-sample';
   var PUBLIC_LIBRARY_NAME = '学習動画サンプル（基本情報技術者ラップマップ）';
+  var PUBLIC_LIBRARY_SHORT_NAME = '学習動画サンプル';
   var RELEASE_BASE = 'https://github.com/tokkun-max/portfolio-site/releases/download/study-videos-v1/';
   var PUBLIC_MANIFEST = [
     { file: '01.mp4', title: '2.3.CPU' },
@@ -677,7 +681,7 @@
       });
       currentIndex = -1;
       els.sampleBadge.hidden = false;
-      els.listFolderName.textContent = PUBLIC_LIBRARY_NAME;
+      els.listFolderName.textContent = PUBLIC_LIBRARY_SHORT_NAME;
       els.listCount.textContent = currentList.length + '本';
       renderList();
       loadAndPlay(0);
