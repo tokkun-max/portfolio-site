@@ -538,9 +538,9 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
     ],
   },
 
-  "video-playlist-player": {
-    slug: "video-playlist-player",
-    title: "動画プレイリストプレーヤー",
+  "memorization-repeat-player": {
+    slug: "memorization-repeat-player",
+    title: "暗記リピートプレーヤー",
     subtitle: "Python / Flask（デモはブラウザ完結版）",
     sections: [
       {
@@ -559,7 +559,7 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
       {
         heading: "サービス概要／プロダクト概要",
         paragraphs: [
-          "「動画プレイリストプレーヤー」は、資格試験対策など暗記のために同じ動画を繰り返し視聴したい学習者向けの動画再生アプリです。",
+          "「暗記リピートプレーヤー」は、資格試験対策など暗記のために同じ動画を繰り返し視聴したい学習者向けの動画再生アプリです。",
           "複数の動画フォルダ（ソース）をボタンで切り替えて選択できます。",
           "「1回で次へ／2回リピート／3回リピート」の3モードで、再生回数を切り替えられます。",
           "サムネイルではなくタイトルのみを並べたシンプルなリストで、動画数が多くても目的の動画をスマートに探せます。",

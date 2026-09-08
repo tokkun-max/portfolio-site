@@ -113,8 +113,8 @@ export const PROJECTS: Project[] = [
     demoUrl: "https://anzan-app.onrender.com",
   },
   {
-    slug: "video-playlist-player",
-    title: "動画プレイリストプレーヤー",
+    slug: "memorization-repeat-player",
+    title: "暗記リピートプレーヤー",
     description:
       "資格試験対策など、暗記のために同じ動画を繰り返し視聴したい学習者向けの動画再生アプリ。「1回で次へ／2回リピート／3回リピート」の3モードで再生回数を切り替えられ、サムネイルなしタイトルのみのシンプルなリストで、動画数が多くても目的の動画をスマートに探せる。",
     stack: ["Python", "Flask"],
