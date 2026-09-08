@@ -93,6 +93,14 @@ export const PROJECTS: Project[] = [
     category: "業務効率化・制作支援",
     demoUrl: "https://claude.ai/code/artifact/77e19ea7-d74b-4412-8f84-b2029d980274",
   },
+  {
+    slug: "video-vst-tool",
+    title: "動画処理＋VST統合ツール",
+    description:
+      "動画編集用ツールと音声処理用ツールという2つの自作アプリを1本に統合したデスクトップアプリ。動画のトリミング・フェード処理・ちらつき修正の後、音声を自動で取り出してステム分離し、VSTプラグインチェーンで声・伴奏それぞれをマスタリングして動画に戻すところまでを、フォルダ指定とボタン操作だけで最後まで自動実行する。",
+    stack: ["Python", "Tkinter", "pedalboard", "demucs", "ffmpeg"],
+    category: "業務効率化・制作支援",
+  },
 
   // 学習支援
   {
@@ -103,5 +111,15 @@ export const PROJECTS: Project[] = [
     stack: ["Java", "Servlet/JSP", "H2 Database"],
     category: "学習支援",
     demoUrl: "https://anzan-app.onrender.com",
+  },
+  {
+    slug: "video-playlist-player",
+    title: "動画プレイリストプレーヤー",
+    description:
+      "資格試験対策など、暗記のために同じ動画を繰り返し視聴したい学習者向けの動画再生アプリ。「1回で次へ／2回リピート／3回リピート」の3モードで再生回数を切り替えられ、サムネイルなしタイトルのみのシンプルなリストで、動画数が多くても目的の動画をスマートに探せる。",
+    stack: ["Python", "Flask"],
+    category: "学習支援",
+    demoUrl: "https://claude.ai/code/artifact/bfd9c866-e2e6-4e33-944d-215195ff57f0",
+    demoLabel: "デモサイトを開く（ウェブ版）",
   },
 ];
