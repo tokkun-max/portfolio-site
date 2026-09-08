@@ -119,7 +119,7 @@ export const PROJECTS: Project[] = [
       "資格試験対策など、暗記のために同じ動画を繰り返し視聴したい学習者向けの動画再生アプリ。「1回で次へ／2回リピート／3回リピート」の3モードで再生回数を切り替えられ、サムネイルなしタイトルのみのシンプルなリストで、動画数が多くても目的の動画をスマートに探せる。",
     stack: ["Python", "Flask"],
     category: "学習支援",
-    demoUrl: "https://claude.ai/code/artifact/bfd9c866-e2e6-4e33-944d-215195ff57f0",
+    demoUrl: "https://tokkun-max.github.io/portfolio-site/repeat-player.html",
     demoLabel: "デモサイトを開く（ウェブ版）",
   },
 ];

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>暗記リピートプレーヤー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  [hidden]{ display:none !important; }
+  :root{
+    color-scheme: light dark;
+    --paper:#f7e8e3;
+    --paper-line:#e2c3ba;
+    --surface:#fffcfb;
+    --surface-2:#fff5f2;
+    --ink:#2b2420;
+    --ink-soft:#71605a;
+    --ink-faint:#a4938c;
+    --accent:#c23b2e;
+    --accent-ink:#fff7f5;
+    --bubble-fill:#2b2420;
+    --bubble-empty:#cdb4ac;
+    --danger:#c23b2e;
+    --shadow: rgba(60,32,24,0.10);
+    --focus-ring: #1f6fb2;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1c1611;
+      --paper-line:#3c2e26;
+      --surface:#251d17;
+      --surface-2:#2c221b;
+      --ink:#f4e8e1;
+      --ink-soft:#bfaca2;
+      --ink-faint:#8a7a71;
+      --accent:#ef7256;
+      --accent-ink:#1c1611;
+      --bubble-fill:#f4e8e1;
+      --bubble-empty:#5a473c;
+      --shadow: rgba(0,0,0,0.45);
+      --focus-ring: #7cc4ff;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1c1611;
+    --paper-line:#3c2e26;
+    --surface:#251d17;
+    --surface-2:#2c221b;
+    --ink:#f4e8e1;
+    --ink-soft:#bfaca2;
+    --ink-faint:#8a7a71;
+    --accent:#ef7256;
+    --accent-ink:#1c1611;
+    --bubble-fill:#f4e8e1;
+    --bubble-empty:#5a473c;
+    --shadow: rgba(0,0,0,0.45);
+    --focus-ring: #7cc4ff;
+  }
+  :root[data-theme="light"]{
+    --paper:#f7e8e3;
+    --paper-line:#e2c3ba;
+    --surface:#fffcfb;
+    --surface-2:#fff5f2;
+    --ink:#2b2420;
+    --ink-soft:#71605a;
+    --ink-faint:#a4938c;
+    --accent:#c23b2e;
+    --accent-ink:#fff7f5;
+    --bubble-fill:#2b2420;
+    --bubble-empty:#cdb4ac;
+    --shadow: rgba(60,32,24,0.10);
+    --focus-ring: #1f6fb2;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New","Hiragino Sans",sans-serif;
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size: 100% 40px;
+    min-height:100vh;
+  }
+  ::selection{ background:var(--accent); color:var(--accent-ink); }
+  :focus-visible{ outline:2px solid var(--focus-ring); outline-offset:2px; }
+  button{ font-family:inherit; }
+
+  .app{
+    max-width:1080px;
+    margin:0 auto;
+    padding:28px 20px 60px;
+  }
+
+  .topbar{ padding:6px 4px 22px; }
+  .brand-mark{
+    display:inline-block;
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;
+    letter-spacing:.12em;
+    color:var(--accent);
+    background:var(--surface);
+    border:1px solid var(--paper-line);
+    padding:3px 9px;
+    border-radius:3px;
+  }
+  h1{
+    font-size:clamp(24px,4vw,34px);
+    font-weight:900;
+    margin:12px 0 6px;
+    text-wrap:balance;
+    letter-spacing:.01em;
+  }
+  .tagline{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:56ch;
+    line-height:1.6;
+  }
+  .unsupported{
+    margin-top:16px;
+    background:var(--surface);
+    border:1px solid var(--accent);
+    color:var(--accent);
+    border-radius:8px;
+    padding:12px 16px;
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  .folder-rail{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:14px 4px;
+    border-top:1px dashed var(--paper-line);
+    border-bottom:1px dashed var(--paper-line);
+    margin-bottom:22px;
+  }
+  .folder-tabs{ display:flex; flex-wrap:wrap; gap:8px; }
+  .folder-tab{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface);
+    border:1px solid var(--paper-line);
+    border-bottom:3px solid var(--paper-line);
+    color:var(--ink-soft);
+    border-radius:7px 7px 3px 3px;
+    padding:8px 10px 6px;
+    cursor:pointer;
+    font-size:14px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .folder-tab:hover{ color:var(--ink); }
+  .folder-tab.active{
+    color:var(--ink);
+    border-bottom-color:var(--accent);
+    font-weight:700;
+  }
+  .tab-remove{
+    color:var(--ink-faint);
+    font-size:13px;
+    line-height:1;
+    padding:2px 4px;
+    border-radius:4px;
+  }
+  .tab-remove:hover{ color:var(--accent); background:var(--surface-2); }
+  .add-folder-btn{
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:7px;
+    padding:10px 16px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  .add-folder-btn:hover{ opacity:.88; }
+  .add-folder-btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+  .workspace{
+    display:grid;
+    grid-template-columns: 1fr 320px;
+    gap:22px;
+    align-items:start;
+  }
+  @media (max-width: 860px){
+    .workspace{ grid-template-columns: 1fr; }
+  }
+
+  .player-card, .mode-card, .list-col{
+    background:var(--surface);
+    border:1px solid var(--paper-line);
+    border-radius:12px;
+    box-shadow:0 2px 10px var(--shadow);
+  }
+
+  .player-frame{
+    position:relative;
+    aspect-ratio:16/9;
+    background:#0c0a08;
+    border-radius:12px 12px 0 0;
+    overflow:hidden;
+  }
+  .player-frame:fullscreen{ background:var(--paper); border-radius:0; }
+  .player-frame video{
+    width:100%; height:100%;
+    display:block;
+    object-fit:contain;
+    background:#0c0a08;
+  }
+  .player-empty{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px; text-align:center;
+    color:#d8c9c2;
+    font-size:14px; line-height:1.7;
+  }
+  .now-playing{
+    display:flex; align-items:baseline; gap:10px;
+    padding:14px 16px;
+    font-size:14px;
+  }
+  .now-playing .np-index{
+    font-family:"JetBrains Mono",monospace;
+    color:var(--accent);
+    font-weight:600;
+  }
+  .now-playing .np-title{
+    font-weight:700;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .now-playing .np-empty{ color:var(--ink-faint); }
+
+  .mode-card{ margin-top:16px; padding:16px; }
+  .mode-label{
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    letter-spacing:.08em;
+    margin-bottom:10px;
+  }
+  .omr-group{ display:flex; flex-wrap:wrap; gap:10px 22px; }
+  .omr-option{
+    display:flex; align-items:center; gap:9px;
+    background:none; border:none; padding:4px 0;
+    color:var(--ink); font-size:14px; cursor:pointer;
+  }
+  .bubble{
+    width:20px; height:20px; border-radius:50%;
+    border:2px solid var(--bubble-empty);
+    display:inline-block;
+    position:relative;
+    flex:none;
+  }
+  .omr-option.selected .bubble{ border-color:var(--bubble-fill); }
+  .omr-option.selected .bubble::after{
+    content:"";
+    position:absolute; inset:3px;
+    border-radius:50%;
+    background:var(--bubble-fill);
+  }
+  .omr-option.selected{ font-weight:700; }
+
+  .list-col{ padding:14px 0; max-height:640px; display:flex; flex-direction:column; }
+  .list-header{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:0 16px 12px;
+    border-bottom:1px solid var(--paper-line);
+    margin-bottom:4px;
+  }
+  .list-header #listFolderName{
+    font-weight:700; font-size:14px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .list-count{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px; color:var(--ink-soft); flex:none; margin-left:8px;
+  }
+  .sample-badge{
+    font-size:11px;
+    color:var(--accent);
+    display:block;
+    margin-top:2px;
+  }
+  .video-list{
+    list-style:none; margin:0; padding:0 8px;
+    overflow-y:auto;
+  }
+  .video-row{
+    display:flex; align-items:baseline; gap:10px;
+    padding:9px 8px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13.5px;
+  }
+  .video-row:hover{ background:var(--surface-2); }
+  .video-row.active{ background:var(--surface-2); }
+  .video-row.active .row-title{ color:var(--accent); font-weight:700; }
+  .row-bubble{
+    font-family:"JetBrains Mono",monospace;
+    font-size:11px;
+    color:var(--ink-faint);
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:1px 5px;
+    flex:none;
+  }
+  .video-row.active .row-bubble{ color:var(--accent); border-color:var(--accent); }
+  .row-title{
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink);
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%);
+    background:var(--ink); color:var(--paper);
+    padding:10px 18px; border-radius:8px; font-size:13.5px;
+    box-shadow:0 6px 20px var(--shadow);
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+    max-width:90vw; text-align:center;
+  }
+  .toast.show{ opacity:1; }
+
+  .foot-note{ margin-top:26px; text-align:center; }
+  .foot-note p{ margin:0; font-size:12.5px; color:var(--ink-faint); line-height:1.7; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <span class="brand-mark">MEMORIZATION PLAYER</span>
+    <h1>暗記リピートプレーヤー</h1>
+    <p class="tagline">「学習動画サンプル」タブでは、作者が実際に使っている資格学習動画をそのまま選んだ回数だけリピート再生できます。「＋ フォルダを追加」からは、自分の端末のフォルダを選んで同じように再生でき、その場合の動画はこの端末上でだけ読み込まれ外部には一切送信されません。</p>
+    <div class="unsupported" id="unsupportedNote" hidden>
+      お使いのブラウザは「＋ フォルダを追加」によるローカル読み込みに対応していません（<strong>Google Chrome または Microsoft Edge</strong> の最新版でご利用いただけます）。「学習動画サンプル」タブは引き続きご覧いただけます。
+    </div>
+  </header>
+
+  <section class="folder-rail">
+    <div class="folder-tabs" id="folderTabs"></div>
+    <button class="add-folder-btn" id="addFolderBtn" type="button">＋ フォルダを追加</button>
+  </section>
+
+  <main class="workspace">
+    <div class="player-col">
+      <div class="player-card">
+        <div class="player-frame" id="playerFrame">
+          <video id="video" playsinline controls></video>
+          <div class="player-empty" id="playerEmpty">
+            上の「＋ フォルダを追加」から、動画が入ったフォルダを選んでください。<br>選んだフォルダの動画が、下のリストに並びます。
+          </div>
+        </div>
+        <div class="now-playing" id="nowPlaying"><span class="np-empty">再生中の動画はありません</span></div>
+      </div>
+
+      <div class="mode-card">
+        <span class="mode-label">くり返し回数（暗記の定着度に合わせて選択）</span>
+        <div class="omr-group" id="modeGroup">
+          <button class="omr-option" data-mode="1" type="button"><span class="bubble"></span>1回で次へ</button>
+          <button class="omr-option" data-mode="2" type="button"><span class="bubble"></span>2回リピート</button>
+          <button class="omr-option" data-mode="3" type="button"><span class="bubble"></span>3回リピート</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="list-col">
+      <div class="list-header">
+        <div>
+          <span id="listFolderName">読み込み中…</span>
+          <span class="sample-badge" id="sampleBadge" hidden>作者の学習動画（公開サンプル）</span>
+        </div>
+        <span class="list-count" id="listCount">−本</span>
+      </div>
+      <ol class="video-list" id="videoList"></ol>
+    </aside>
+  </main>
+
+  <footer class="foot-note">
+    <p>動画をダブルクリック（スマートフォンはダブルタップ）すると全画面表示に切り替わります。</p>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var VIDEO_EXT = /\.(mp4|webm|ogv|ogg|mov|m4v|mkv)$/i;
+
+  var PUBLIC_LIBRARY_ID = 'public-sample';
+  var PUBLIC_LIBRARY_NAME = '学習動画サンプル';
+  var RELEASE_BASE = 'https://github.com/tokkun-max/portfolio-site/releases/download/study-videos-v1/';
+  var PUBLIC_MANIFEST = [
+    { file: '01.mp4', title: '2.3.CPU' },
+    { file: '02.mp4', title: '４．5.主記憶装置、補助記憶装置' },
+    { file: '03.mp4', title: '6.7.入力装置出力装置' },
+    { file: '04.mp4', title: '8.9 クロック数、CPI' },
+    { file: '05.mp4', title: '10.MIPS' },
+    { file: '06.mp4', title: '11パイプライン方式' },
+    { file: '07.mp4', title: '12.13キャッシュメモリ、メモリインターリブ' },
+    { file: '08.mp4', title: '14.15ジョブタスク管理、記憶管理' },
+    { file: '09.mp4', title: '16.ファイル管理' },
+    { file: '10.mp4', title: '17.ミドルウェアDBMS' },
+    { file: '11.mp4', title: '18応用ソフトウェア' },
+    { file: '12.mp4', title: '19.20 クライアントサーバリクエストとレスポンス' },
+    { file: '13.mp4', title: '21ブラウザの役割' },
+    { file: '14.mp4', title: '22.23物理層 リピータデータリンク層ブリッジ' },
+    { file: '15.mp4', title: '24.25ネットワーク層ルータトランスポート層ゲートウェイ' },
+    { file: '16.mp4', title: '26.27 IPアドレス (住所)DNSサーバ (変換辞書)' },
+    { file: '17.mp4', title: '28正規化 (第一〜第三)' },
+    { file: '18.mp4', title: '29.30 ACID特性 排他制御 (ロック)' },
+    { file: '19.mp4', title: '31 SQL' },
+    { file: '20.mp4', title: '32.33.教師ありなし学習強化学習' },
+    { file: '21.mp4', title: '34 ディープラーニング' },
+    { file: '22.mp4', title: '35 2進数・論理演算' },
+    { file: '23.mp4', title: '36 アルゴリズム・疑似言語' },
+    { file: '24.mp4', title: '37.38 CIA（機密性・完全性・可用性） 脅威と脆弱性' },
+    { file: '25.mp4', title: '39.40.マルウェア（ウイルス・ワーム・トロイ）フィッシング・ソーシャルエンジニアリング' },
+    { file: '26.mp4', title: '41.42.DoS・DDoS攻撃 SQLインジェクション・XSS' },
+    { file: '27.mp4', title: '43.44.暗号化（共通鍵・公開鍵） デジタル署名・PKI・認証局' },
+    { file: '28.mp4', title: '45.46.ファイアウォールDMZ IDS・IPS・WAF' },
+    { file: '29.mp4', title: '47.48.ISMS・情報セキュリティポリシー リスクマネジメント（特定・評価・対応）' },
+    { file: '30.mp4', title: '49.50.稼働率（MTBF・MTTR）RASIS（信頼性・保守性・可用性など）' },
+    { file: '31.mp4', title: '51.52.直列・並列システムの稼働率計算 フェールセーフ・フールプルーフ' },
+    { file: '32.mp4', title: '53.RAID（0・1・5・6）' },
+    { file: '33.mp4', title: '54.55.SaaS・PaaS・IaaS オンプレミス vs クラウドの違い' },
+    { file: '34.mp4', title: '56.ウォーターフォールモデル' },
+    { file: '35.mp4', title: '57.アジャイル開発（スクラム・XP）' },
+    { file: '36.mp4', title: '58.スパイラルモデル・プロトタイプモデル' },
+    { file: '37.mp4', title: '59.60.単体・結合・システム・受入テスト ブラックボックス・ホワイトボックステスト' },
+    { file: '38.mp4', title: '61.オブジェクト指向（クラス・継承・多態性）' },
+    { file: '39.mp4', title: '62.UML（クラス図・シーケンス図・ユースケース図）' },
+    { file: '40.mp4', title: '63.64.WBS（作業分解構造）ガントチャート・アローダイアグラム' },
+    { file: '41.mp4', title: '65.クリティカルパス' },
+    { file: '42.mp4', title: '66.ファンクションポイント法' },
+    { file: '43.mp4', title: '67.インシデント管理・問題管理' },
+    { file: '44.mp4', title: '68.システム監査・情報セキュリティ監査' },
+    { file: '45.mp4', title: '69.70.SWOT分析 PPM（プロダクトポートフォリオマネジメント）' },
+    { file: '46.mp4', title: '71.バランススコアカード（BSC）' },
+    { file: '47.mp4', title: '72.73 ERP・SCM・CRM ナレッジマネジメント' },
+    { file: '48.mp4', title: '74.著作権・特許権・商標権' },
+    { file: '49.mp4', title: '75.個人情報保護法・不正アクセス禁止法' },
+    { file: '50.mp4', title: '76.ISO・JIS・IEEE規格' },
+    { file: '51.mp4', title: '77.4P分析・市場セグメンテーション ver 2' },
+    { file: '52.mp4', title: '77.4P分析・市場セグメンテーション' },
+    { file: '53.mp4', title: '78.損益分岐点・財務諸表の読み方' }
+  ];
+
+  var els = {
+    unsupportedNote: document.getElementById('unsupportedNote'),
+    folderTabs: document.getElementById('folderTabs'),
+    addFolderBtn: document.getElementById('addFolderBtn'),
+    video: document.getElementById('video'),
+    playerFrame: document.getElementById('playerFrame'),
+    playerEmpty: document.getElementById('playerEmpty'),
+    nowPlaying: document.getElementById('nowPlaying'),
+    modeGroup: document.getElementById('modeGroup'),
+    listFolderName: document.getElementById('listFolderName'),
+    sampleBadge: document.getElementById('sampleBadge'),
+    listCount: document.getElementById('listCount'),
+    videoList: document.getElementById('videoList'),
+    toast: document.getElementById('toast')
+  };
+
+  var supported = typeof window.showDirectoryPicker === 'function';
+
+  var folders = [];        // {id, name, handle}
+  var currentFolderId = null;
+  var currentList = [];    // {name, handle} for local items, or {name, remoteUrl} for the public library
+  var currentIndex = -1;
+  var currentPlays = 0;
+  var mode = parseInt(localStorage.getItem('vpp_mode'), 10) || 1;
+  var objectUrl = null;
+
+  function toast(msg){
+    els.toast.textContent = msg;
+    els.toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ els.toast.classList.remove('show'); }, 2600);
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, function(c){
+      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+    });
+  }
+
+  function stripExt(name){ return name.replace(/\.[^.]+$/, ''); }
+
+  function displayTitle(item){ return item.remoteUrl ? item.name : stripExt(item.name); }
+
+  function naturalCompare(a, b){
+    var re = /(\d+)|(\D+)/g;
+    var ap = a.match(re) || [];
+    var bp = b.match(re) || [];
+    var len = Math.max(ap.length, bp.length);
+    for (var i = 0; i < len; i++){
+      var x = ap[i] || '';
+      var y = bp[i] || '';
+      var xNum = /^\d+$/.test(x);
+      var yNum = /^\d+$/.test(y);
+      if (xNum && yNum){
+        var d = parseInt(x, 10) - parseInt(y, 10);
+        if (d !== 0) return d;
+      } else {
+        var c = x.localeCompare(y, 'ja');
+        if (c !== 0) return c;
+      }
+    }
+    return 0;
+  }
+
+  // ---- IndexedDB persistence of folder handles ----
+  function openDb(){
+    return new Promise(function(resolve, reject){
+      var req = indexedDB.open('repeat-player-library', 1);
+      req.onupgradeneeded = function(){
+        req.result.createObjectStore('folders', { keyPath: 'id' });
+      };
+      req.onsuccess = function(){ resolve(req.result); };
+      req.onerror = function(){ reject(req.error); };
+    });
+  }
+  function dbGetAll(){
+    return openDb().then(function(db){
+      return new Promise(function(resolve, reject){
+        var tx = db.transaction('folders', 'readonly');
+        var req = tx.objectStore('folders').getAll();
+        req.onsuccess = function(){ resolve(req.result || []); };
+        req.onerror = function(){ reject(req.error); };
+      });
+    }).catch(function(){ return []; });
+  }
+  function dbPut(record){
+    return openDb().then(function(db){
+      return new Promise(function(resolve, reject){
+        var tx = db.transaction('folders', 'readwrite');
+        tx.objectStore('folders').put(record);
+        tx.oncomplete = function(){ resolve(); };
+        tx.onerror = function(){ reject(tx.error); };
+      });
+    }).catch(function(){});
+  }
+  function dbDelete(id){
+    return openDb().then(function(db){
+      return new Promise(function(resolve, reject){
+        var tx = db.transaction('folders', 'readwrite');
+        tx.objectStore('folders').delete(id);
+        tx.oncomplete = function(){ resolve(); };
+        tx.onerror = function(){ reject(tx.error); };
+      });
+    }).catch(function(){});
+  }
+
+  function ensurePermission(handle){
+    var opts = { mode: 'read' };
+    return handle.queryPermission(opts).then(function(state){
+      if (state === 'granted') return true;
+      return handle.requestPermission(opts).then(function(state2){
+        return state2 === 'granted';
+      });
+    }).catch(function(){ return false; });
+  }
+
+  async function scanFolder(dirHandle){
+    var files = [];
+    for await (var handle of dirHandle.values()){
+      if (handle.kind === 'file' && VIDEO_EXT.test(handle.name)){
+        files.push({ name: handle.name, handle: handle });
+      }
+    }
+    files.sort(function(a, b){ return naturalCompare(a.name, b.name); });
+    return files;
+  }
+
+  // ---- rendering ----
+  function renderTabs(){
+    els.folderTabs.innerHTML = '';
+
+    var pubBtn = document.createElement('button');
+    pubBtn.type = 'button';
+    pubBtn.className = 'folder-tab public' + (currentFolderId === PUBLIC_LIBRARY_ID ? ' active' : '');
+    pubBtn.innerHTML = '<span class="tab-name">' + escapeHtml(PUBLIC_LIBRARY_NAME) + '</span>';
+    pubBtn.addEventListener('click', function(){ selectFolder(PUBLIC_LIBRARY_ID); });
+    els.folderTabs.appendChild(pubBtn);
+
+    folders.forEach(function(f){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'folder-tab' + (f.id === currentFolderId ? ' active' : '');
+      btn.innerHTML = '<span class="tab-name">' + escapeHtml(f.name) + '</span>' +
+        '<span class="tab-remove" title="ライブラリから削除">×</span>';
+      btn.addEventListener('click', function(e){
+        if (e.target.classList.contains('tab-remove')) return;
+        selectFolder(f.id);
+      });
+      btn.querySelector('.tab-remove').addEventListener('click', function(e){
+        e.stopPropagation();
+        removeFolder(f.id);
+      });
+      els.folderTabs.appendChild(btn);
+    });
+  }
+
+  function renderList(){
+    els.videoList.innerHTML = '';
+    currentList.forEach(function(item, i){
+      var li = document.createElement('li');
+      li.className = 'video-row' + (i === currentIndex ? ' active' : '');
+      li.innerHTML = '<span class="row-bubble">' + String(i + 1).padStart(2, '0') + '</span>' +
+        '<span class="row-title">' + escapeHtml(displayTitle(item)) + '</span>';
+      li.addEventListener('click', function(){ loadAndPlay(i); });
+      els.videoList.appendChild(li);
+    });
+  }
+
+  function renderModeButtons(){
+    els.modeGroup.querySelectorAll('.omr-option').forEach(function(btn){
+      btn.classList.toggle('selected', parseInt(btn.dataset.mode, 10) === mode);
+    });
+  }
+
+  function updateNowPlaying(){
+    if (currentIndex < 0 || !currentList[currentIndex]){
+      els.nowPlaying.innerHTML = '<span class="np-empty">再生中の動画はありません</span>';
+      return;
+    }
+    els.nowPlaying.innerHTML =
+      '<span class="np-index">' + String(currentIndex + 1).padStart(2, '0') + '/' + String(currentList.length).padStart(2, '0') + '</span>' +
+      '<span class="np-title">' + escapeHtml(displayTitle(currentList[currentIndex])) + '</span>';
+  }
+
+  // ---- folder actions ----
+  els.addFolderBtn.addEventListener('click', async function(){
+    if (!supported) return;
+    var handle;
+    try {
+      handle = await window.showDirectoryPicker({ id: 'repeat-player', mode: 'read' });
+    } catch (err){
+      return; // user cancelled
+    }
+    var id = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
+    var record = { id: id, name: handle.name, handle: handle };
+    folders.push(record);
+    dbPut(record);
+    renderTabs();
+    selectFolder(id);
+  });
+
+  async function removeFolder(id){
+    folders = folders.filter(function(f){ return f.id !== id; });
+    dbDelete(id);
+    if (currentFolderId === id){
+      selectFolder(PUBLIC_LIBRARY_ID);
+      return;
+    }
+    renderTabs();
+  }
+
+  async function selectFolder(id){
+    if (id === PUBLIC_LIBRARY_ID){
+      currentFolderId = id;
+      renderTabs();
+      currentList = PUBLIC_MANIFEST.map(function(m){
+        return { name: m.title, remoteUrl: RELEASE_BASE + m.file };
+      });
+      currentIndex = -1;
+      els.sampleBadge.hidden = false;
+      els.listFolderName.textContent = PUBLIC_LIBRARY_NAME;
+      els.listCount.textContent = currentList.length + '本';
+      renderList();
+      loadAndPlay(0);
+      return;
+    }
+
+    var f = folders.find(function(x){ return x.id === id; });
+    if (!f) return;
+    var ok = await ensurePermission(f.handle);
+    if (!ok){ toast('フォルダへのアクセスが許可されませんでした'); return; }
+    currentFolderId = id;
+    renderTabs();
+    toast('「' + f.name + '」を読み込み中…');
+    var list;
+    try {
+      list = await scanFolder(f.handle);
+    } catch (err){
+      toast('フォルダの読み込みに失敗しました');
+      return;
+    }
+    currentList = list;
+    currentIndex = -1;
+    els.sampleBadge.hidden = true;
+    els.listFolderName.textContent = f.name;
+    els.listCount.textContent = list.length + '本';
+    renderList();
+    if (list.length){
+      loadAndPlay(0);
+    } else {
+      showEmptyPlayer();
+      updateNowPlaying();
+      toast('動画ファイルが見つかりませんでした');
+    }
+  }
+
+  function showEmptyPlayer(){
+    els.video.pause();
+    els.video.removeAttribute('src');
+    els.video.hidden = true;
+    els.playerEmpty.hidden = false;
+    if (objectUrl){ URL.revokeObjectURL(objectUrl); objectUrl = null; }
+  }
+
+  async function loadAndPlay(i){
+    if (i < 0 || i >= currentList.length){
+      updateNowPlaying();
+      toast('リストの最後まで再生しました');
+      return;
+    }
+    currentIndex = i;
+    currentPlays = 0;
+    var item = currentList[i];
+
+    if (objectUrl){ URL.revokeObjectURL(objectUrl); objectUrl = null; }
+
+    if (item.remoteUrl){
+      els.playerEmpty.hidden = true;
+      els.video.hidden = false;
+      els.video.src = item.remoteUrl;
+      updateNowPlaying();
+      renderList();
+      els.video.play().catch(function(){});
+      return;
+    }
+
+    var file;
+    try {
+      file = await item.handle.getFile();
+    } catch (err){
+      toast('動画の読み込みに失敗しました：' + item.name);
+      return;
+    }
+    objectUrl = URL.createObjectURL(file);
+    els.playerEmpty.hidden = true;
+    els.video.hidden = false;
+    els.video.src = objectUrl;
+    updateNowPlaying();
+    renderList();
+    els.video.play().catch(function(){});
+  }
+
+  els.video.addEventListener('ended', function(){
+    currentPlays++;
+    if (currentPlays < mode){
+      els.video.currentTime = 0;
+      els.video.play().catch(function(){});
+    } else {
+      loadAndPlay(currentIndex + 1);
+    }
+  });
+
+  els.playerFrame.addEventListener('dblclick', function(){
+    if (!document.fullscreenElement){
+      (els.playerFrame.requestFullscreen && els.playerFrame.requestFullscreen()) ||
+      (els.video.requestFullscreen && els.video.requestFullscreen());
+    } else {
+      document.exitFullscreen();
+    }
+  });
+
+  els.modeGroup.querySelectorAll('.omr-option').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      mode = parseInt(btn.dataset.mode, 10);
+      localStorage.setItem('vpp_mode', mode);
+      currentPlays = 0;
+      renderModeButtons();
+    });
+  });
+
+  // ---- boot ----
+  async function boot(){
+    renderModeButtons();
+
+    if (!supported){
+      els.unsupportedNote.hidden = false;
+      els.addFolderBtn.disabled = true;
+    } else {
+      var stored = await dbGetAll();
+      folders = stored.map(function(r){ return { id: r.id, name: r.name, handle: r.handle }; });
+    }
+
+    renderTabs();
+    selectFolder(PUBLIC_LIBRARY_ID);
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
